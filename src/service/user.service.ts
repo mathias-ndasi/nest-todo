@@ -1,10 +1,12 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { updateUserDTO } from 'src/dto/user.dto';
+import { User } from '@prisma/client';
+import { updatePasswordDTO, updateUserDTO } from 'src/dto/user.dto';
 import { UserEnum } from 'src/enum/user.enum';
 import { CustomException } from 'src/exception/error-exception.filter';
 import { SuccessResponse } from 'src/exception/success-exception.filter';
 import { UserHelper } from 'src/helper/user.helper';
 import { AuthService } from './auth.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -62,11 +64,45 @@ export class UserService {
         .response();
     }
 
+    // check is email needs updates
+    if (userPayload.email) {
+      const existingUser = await this.userHelper.getByEmail(userPayload.email);
+
+      if (existingUser && existingUser !== null) {
+        throw new CustomException()
+          .setMessage(UserEnum.userAlreadyExist)
+          .response();
+      }
+    }
+
     // Update user details
     const updatedUser = await this.userHelper.update(userId, userPayload);
 
     return new SuccessResponse(updatedUser)
       .setMessage(UserEnum.userUpdatedSuccessfully)
+      .response();
+  }
+
+  async changePassword(user: User, passwordPayload: updatePasswordDTO) {
+    // verify password
+    const validPassword = await bcrypt.compare(
+      passwordPayload.oldPassword,
+      user.password,
+    );
+
+    if (!validPassword) {
+      throw new CustomException(null)
+        .setMessage(UserEnum.passwordInvalid)
+        .setStatusCode(HttpStatus.BAD_REQUEST)
+        .response();
+    }
+
+    // perform updates
+    await this.userHelper.changePassword(user, passwordPayload);
+
+    return new SuccessResponse(null)
+      .setMessage(UserEnum.passwordMismatch)
+      .setStatusCode(HttpStatus.OK)
       .response();
   }
 

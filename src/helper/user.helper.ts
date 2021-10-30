@@ -1,7 +1,12 @@
 import { PrismaService } from 'src/service/prisma.service';
 import { User } from '@prisma/client';
-import { createUserDTO, updateUserDTO } from 'src/dto/user.dto';
+import {
+  createUserDTO,
+  updatePasswordDTO,
+  updateUserDTO,
+} from 'src/dto/user.dto';
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserHelper {
@@ -71,6 +76,28 @@ export class UserHelper {
     await this.prismaService.user.delete({
       where: {
         id: userId,
+      },
+    });
+
+    // Disconnect prisma
+    this.prismaService.$disconnect();
+
+    return;
+  }
+
+  async changePassword(user: User, passwordPayload: updatePasswordDTO) {
+    const hashPassword = await bcrypt.hash(
+      passwordPayload.newPassword,
+      parseInt(process.env.SALT_ROUNDS),
+    );
+
+    // update user in db
+    await this.prismaService.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: hashPassword,
       },
     });
 

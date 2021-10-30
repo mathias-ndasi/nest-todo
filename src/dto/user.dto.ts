@@ -33,5 +33,19 @@ export class updateUserDTO {
   lastName?: string;
 
   @ApiProperty({ required: false })
+  email?: string;
+
+  @ApiProperty({ required: false })
   address?: string;
+}
+
+export class updatePasswordDTO {
+  @ApiProperty()
+  oldPassword: string;
+
+  @ApiProperty()
+  newPassword: string;
+
+  @ApiProperty()
+  confirmPassword: string;
 }

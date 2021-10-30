@@ -7,4 +7,7 @@ export enum UserEnum {
   invalidAccessToken = 'Invalid access token.',
   missingAccessToken = 'Missing access token.',
   userDeletedSuccessfully = 'Account deleted successfully.',
+  userPasswordUpdateSuccessfully = 'Password Updated successfully.',
+  passwordMismatch = 'Password mismatch!',
+  passwordInvalid = 'Invalid password',
 }

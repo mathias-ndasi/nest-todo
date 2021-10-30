@@ -7,33 +7,62 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
+  Post,
   Put,
   UseGuards,
+  Request,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { updateUserDTO } from 'src/dto/user.dto';
+import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  createUserDTO,
+  loginUserDTO,
+  updatePasswordDTO,
+  updateUserDTO,
+} from 'src/dto/user.dto';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
+import { ChangePasswordGuard } from 'src/guard/user.guard';
+import { AuthService } from 'src/service/auth.service';
 import { UserService } from 'src/service/user.service';
 
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth('JWT-auth')
 @ApiTags('Account')
 @Controller('account')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+  ) {}
 
+  @ApiCreatedResponse()
+  @Post('signup')
+  @HttpCode(HttpStatus.CREATED)
+  async signup(@Body() userPayload: createUserDTO) {
+    return this.authService.signup(userPayload);
+  }
+
+  @ApiCreatedResponse()
+  @Post('login')
+  async login(@Body() userPayload: loginUserDTO) {
+    return await this.authService.authenticate(userPayload);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllUsers() {
     return await this.userService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Get(':userId')
   @HttpCode(HttpStatus.OK)
   async getSingleUserById(@Param('userId', ParseIntPipe) userId: number) {
     return await this.userService.findOneById(userId);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Put(':userId')
   @HttpCode(HttpStatus.OK)
   async updateUser(
@@ -43,9 +72,23 @@ export class UserController {
     return await this.userService.update(userId, userPayload);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @Delete(':userId')
   @HttpCode(HttpStatus.OK)
   async deleteUser(@Param('userId', ParseIntPipe) userId: number) {
     return await this.userService.remove(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseGuards(ChangePasswordGuard)
+  @ApiBearerAuth('JWT-auth')
+  @Put('change/password')
+  @HttpCode(HttpStatus.OK)
+  async changeUserPassword(
+    @Request() req,
+    @Body() passwordPayload: updatePasswordDTO,
+  ) {
+    return this.userService.changePassword(req.user, passwordPayload);
   }
 }
