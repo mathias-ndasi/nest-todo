@@ -1,12 +1,12 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { UserHelper } from 'src/helper/user.helper';
+import { UserHelper } from '../helper/user.helper';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { createUserDTO, loginUserDTO } from 'src/dto/user.dto';
-import { CustomException } from 'src/exception/error-exception.filter';
-import { UserEnum } from 'src/enum/user.enum';
-import { SuccessResponse } from 'src/exception/success-exception.filter';
+import { CustomException } from '../exception/error-exception.filter';
+import { UserEnum } from '../enum/user.enum';
+import { SuccessResponse } from '../exception/success-exception.filter';
 
 @Injectable()
 export class AuthService {

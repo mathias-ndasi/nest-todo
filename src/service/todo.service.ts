@@ -1,10 +1,10 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { createTodoDTO, updateTodoDTO } from 'src/dto/todo.dto';
-import { TodoEnum } from 'src/enum/todo.enum';
-import { CustomException } from 'src/exception/error-exception.filter';
-import { SuccessResponse } from 'src/exception/success-exception.filter';
-import { TodoHelper } from 'src/helper/todo.helper';
+import { createTodoDTO, updateTodoDTO } from '../dto/todo.dto';
+import { TodoEnum } from '../enum/todo.enum';
+import { CustomException } from '../exception/error-exception.filter';
+import { SuccessResponse } from '../exception/success-exception.filter';
+import { TodoHelper } from '../helper/todo.helper';
 
 @Injectable()
 export class TodoService {

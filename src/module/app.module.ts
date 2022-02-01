@@ -1,36 +1,36 @@
 import { ConfigModule } from '@nestjs/config';
-import { PrismaService } from 'src/service/prisma.service';
-import { UserController } from 'src/controller/user.controller';
-import { UserService } from 'src/service/user.service';
-import { UserHelper } from 'src/helper/user.helper';
-import { AuthService } from 'src/service/auth.service';
+import { PrismaService } from '../service/prisma.service';
+import { UserController } from '../controller/user.controller';
+import { UserService } from '../service/user.service';
+import { UserHelper } from '../helper/user.helper';
+import { AuthService } from '../service/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from 'src/guard/jwt.strategy';
-import { TodoController } from 'src/controller/todo.controller';
-import { TodoService } from 'src/service/todo.service';
-import { TodoHelper } from 'src/helper/todo.helper';
+import { JwtStrategy } from '../guard/jwt.strategy';
 import { Module } from '@nestjs/common';
+import { TodoModule } from './todo.module';
+import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import * as path from 'path';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      parser: I18nJsonParser,
+      parserOptions: {
+        path: '../i18n',
+      },
+    }),
     PassportModule,
     JwtModule.register({
       secret: process.env.APP_SECRET,
       signOptions: { expiresIn: '7d' }, // expires in 7 days
     }),
+    TodoModule,
   ],
-  controllers: [UserController, TodoController],
-  providers: [
-    JwtStrategy,
-    PrismaService,
-    UserHelper,
-    UserService,
-    AuthService,
-    TodoHelper,
-    TodoService,
-  ],
+  controllers: [UserController],
+  providers: [JwtStrategy, PrismaService, UserHelper, UserService, AuthService],
   exports: [PrismaService, AuthService],
 })
 export class AppModule {}

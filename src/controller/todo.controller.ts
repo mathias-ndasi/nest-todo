@@ -12,9 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
-import { createTodoDTO, updateTodoDTO } from 'src/dto/todo.dto';
-import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
-import { TodoService } from 'src/service/todo.service';
+import { createTodoDTO, updateTodoDTO } from '../dto/todo.dto';
+import { JwtAuthGuard } from '../guard/jwt-auth.guard';
+import { TodoService } from '../service/todo.service';
 
 @UseGuards(JwtAuthGuard)
 @ApiBasicAuth('JWT-auth')

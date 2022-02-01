@@ -4,9 +4,9 @@ import {
   HttpStatus,
   Injectable,
 } from '@nestjs/common';
-import { updatePasswordDTO } from 'src/dto/user.dto';
-import { UserEnum } from 'src/enum/user.enum';
-import { CustomException } from 'src/exception/error-exception.filter';
+import { updatePasswordDTO } from '../dto/user.dto';
+import { UserEnum } from '../enum/user.enum';
+import { CustomException } from '../exception/error-exception.filter';
 
 @Injectable()
 export class ChangePasswordGuard implements CanActivate {

@@ -1,19 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { updatePasswordDTO, updateUserDTO } from 'src/dto/user.dto';
-import { UserEnum } from 'src/enum/user.enum';
-import { CustomException } from 'src/exception/error-exception.filter';
-import { SuccessResponse } from 'src/exception/success-exception.filter';
-import { UserHelper } from 'src/helper/user.helper';
-import { AuthService } from './auth.service';
+import { updatePasswordDTO, updateUserDTO } from '../dto/user.dto';
+import { UserEnum } from '../enum/user.enum';
+import { CustomException } from '../exception/error-exception.filter';
+import { SuccessResponse } from '../exception/success-exception.filter';
+import { UserHelper } from '../helper/user.helper';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userHelper: UserHelper,
-    private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly userHelper: UserHelper) {}
 
   async findAll() {
     // Get all users

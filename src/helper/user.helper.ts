@@ -1,4 +1,4 @@
-import { PrismaService } from 'src/service/prisma.service';
+import { PrismaService } from '../service/prisma.service';
 import { User } from '@prisma/client';
 import {
   createUserDTO,

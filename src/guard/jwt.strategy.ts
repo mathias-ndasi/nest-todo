@@ -2,10 +2,10 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { User } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UserEnum } from 'src/enum/user.enum';
-import { CustomException } from 'src/exception/error-exception.filter';
-import { UserHelper } from 'src/helper/user.helper';
-import { jwt } from 'src/interface/jwt.interface';
+import { UserEnum } from '../enum/user.enum';
+import { CustomException } from '../exception/error-exception.filter';
+import { UserHelper } from '../helper/user.helper';
+import { jwt } from '../interface/jwt.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

@@ -18,11 +18,11 @@ import {
   loginUserDTO,
   updatePasswordDTO,
   updateUserDTO,
-} from 'src/dto/user.dto';
-import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
-import { ChangePasswordGuard } from 'src/guard/user.guard';
-import { AuthService } from 'src/service/auth.service';
-import { UserService } from 'src/service/user.service';
+} from '../dto/user.dto';
+import { JwtAuthGuard } from '../guard/jwt-auth.guard';
+import { ChangePasswordGuard } from '../guard/user.guard';
+import { AuthService } from '../service/auth.service';
+import { UserService } from '../service/user.service';
 
 @ApiTags('Account')
 @Controller('account')

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Todo } from '@prisma/client';
-import { createTodoDTO, updateTodoDTO } from 'src/dto/todo.dto';
-import { PrismaService } from 'src/service/prisma.service';
+import { createTodoDTO, updateTodoDTO } from '../dto/todo.dto';
+import { PrismaService } from '../service/prisma.service';
 
 @Injectable()
 export class TodoHelper {
